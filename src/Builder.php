@@ -72,9 +72,10 @@ class Builder extends HookableBuilder
      * Exclude Relevance Sort
      * 
      */
-    public function excludeRelevanceSort()
+    public function useQueryOrders()
     {
         $this->excludeRelevanceSort = true;
+        return $this;
     }
 
     /**

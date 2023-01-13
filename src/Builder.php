@@ -40,6 +40,13 @@ class Builder extends HookableBuilder
      */
     protected $joiner;
 
+    /**
+     * Exclude Relevance Sort
+     *
+     * @var excludeRelevanceSort
+     */
+    protected $excludeRelevanceSort = false;
+
     /*
     |--------------------------------------------------------------------------
     | Additional features
@@ -59,6 +66,15 @@ class Builder extends HookableBuilder
         }
 
         return parent::get($columns);
+    }
+
+    /**
+     * Exclude Relevance Sort
+     * 
+     */
+    public function excludeRelevanceSort()
+    {
+        $this->excludeRelevanceSort = true;
     }
 
     /**
@@ -150,10 +166,12 @@ class Builder extends HookableBuilder
 
         $this->query->where('relevance', '>=', new Expression(number_format($threshold, 2)));
 
-        $this->query->orders = array_merge(
-            [['column' => 'relevance', 'direction' => 'desc']],
-            (array) $this->query->orders
-        );
+        if (!$this->excludeRelevanceSort) {
+            $this->query->orders = array_merge(
+                [['column' => 'relevance', 'direction' => 'desc']],
+                (array) $this->query->orders
+            );
+        }
     }
 
     /**
